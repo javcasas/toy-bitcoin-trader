@@ -19,6 +19,7 @@ class MovingAverage(object):
 
 
 def main():
+    logfile = open("data.txt", "a")
     wallet = {}
     _20min_ave = MovingAverage(20)
     _200min_ave = MovingAverage(200)
@@ -33,7 +34,10 @@ def main():
                 r = requests.get('https://blockchain.info/ticker').text
                 data = json.loads(r)
                 val = float(data['USD']['last'])
-            except Exception:
+                logfile.write("%s\n" % datetime.now().isoformat())
+                logfile.write("%s\n\n" % r.encode("ascii", "ignore"))
+            except Exception, e:
+                print e
                 time.sleep(0.5)
                 continue
             _20min_ave.add_point(val)
@@ -61,6 +65,7 @@ def main():
         print "Final status:"
         print "USD: {}, BTC:{}".format(wallet['usd'], wallet['btc'])
         pickle.dump(wallet, file("wallet.pickle", "w"))
+        logfile.close()
 
 if __name__ == "__main__":
     main()
