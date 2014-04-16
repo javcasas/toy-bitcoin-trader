@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+from datetime import datetime
 
 class MovingAverage(object):
     def __init__(self, npoints):
@@ -27,6 +28,9 @@ def main():
             val = float(data['USD']['last'])
             _20min_ave.add_point(val)
             _200min_ave.add_point(val)
+            print
+            print
+            print "%s" % datetime.now().isoformat()
             print "20: {}, 200:{}".format(_20min_ave.average(), _200min_ave.average())
             print "USD: {}, BTC:{}".format(usd, btc)
             if _20min_ave.average() > _200min_ave.average():
@@ -49,4 +53,5 @@ def main():
         print "Final status:"
         print "USD: {}, BTC:{}".format(usd, btc)
 
-main()
+if __name__ == "__main__":
+    main()
